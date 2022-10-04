@@ -39,8 +39,8 @@ data <- read_csv("data/chds6162_data.csv")
 Use `select` to show just the `marital` variable.
 
 ```{r}
-data %>% 
-    select(marital)
+data %>%
+  select(marital)
 ```
 
 `select` for multiple variables:
@@ -48,8 +48,8 @@ data %>%
 Use `select` to show `marital` and `ed` variables.
 
 ```{r}
-data %>% 
-    select(marital,ed)
+data %>%
+  select(marital, ed)
 ```
 
 Use  `select`  for a range of columns. 
@@ -59,29 +59,28 @@ Use  `select`  for a range of columns.
 ```{r}
 # option one:
 
-data %>% 
-    select(wt:number)
+data %>%
+  select(wt:number)
 
 # option 2:
 
-data %>% 
-    select(wt:last_col())
+data %>%
+  select(wt:last_col())
 ```
 
 Drop the `race` variable.
 
 ```{r}
-data %>% 
-    select(-race)
+data %>%
+  select(-race)
 ```
 
 Drop the variables that belonged to the father from `drace` to `dwt`
 
 ```{r}
 
-data %>% 
-    select(-(drace:dwt))
-
+data %>%
+  select(-(drace:dwt))
 ```
 
 
@@ -95,30 +94,30 @@ We use `filter` to choose a subset of cases.
 Use `filter` to keep only respondents who are divorced (`marital` = 3). 
 
 ```{r}
-data %>% 
-    filter(marital == 3)
+data %>%
+  filter(marital == 3)
 ```
 
 Use `filter` to keep only respondents who are **not** divorced. 
 
 ```{r}
-data %>% 
-    filter(marital != 3)
+data %>%
+  filter(marital != 3)
 ```
 
 Use `%in%` within the `filter` function to keep only those whose mothers' race was reported as white. In this dataset, values from 0 to 5 represent "white" under the `race`variable.
 
 ```{r}
-data %>% 
-    filter(race %in% c(0:5))
+data %>%
+  filter(race %in% c(0:5))
 ```
 
 Create a chain that keeps only those are college grads (value of 5). Then, `filter` to keep only those who are not married (value of 5).
 
 ```{r}
-data %>% 
-    filter(ed == 5) %>% 
-    filter(marital != 5)
+data %>%
+  filter(ed == 5) %>%
+  filter(marital != 5)
 ```
 
 #?
@@ -135,8 +134,8 @@ Create a **new variable with a specific value**
 Create a new variable called `country` and fill that variable with "US".
 
 ```{r}
-data %>% 
-    mutate(country = "US") 
+data %>%
+  mutate(country = "US")
 ```
 
 
@@ -145,9 +144,9 @@ Create a **new variable based on other variables**
 Create a new variable called `gestation_weeks` and calculate gestation length in weeks rather than days (try rounding this number to only 2 decimals). Remember that the `gestation` variable is a measure of the **gestation length** in days. Then `select` both variables. 
 
 ```{r}
-data %>% 
-    mutate(gestation_weeks = round(gestation / 7,2)) %>% 
-    select(gestation, gestation_weeks)
+data %>%
+  mutate(gestation_weeks = round(gestation / 7, 2)) %>%
+  select(gestation, gestation_weeks)
 ```
 
 Change an **existing variable**
@@ -157,15 +156,15 @@ Convert the `dwt` variable to kilos by dividing by 2.205 (it's in pounds now). T
 *Try rounding to 2 decimals
 
 ```{r}
-data %>% 
-    mutate(dwt = dwt / 2.205) %>% 
-    select(dwt)
+data %>%
+  mutate(dwt = dwt / 2.205) %>%
+  select(dwt)
 
-#Rounding it
+# Rounding it
 
-data %>% 
-    mutate(dwt = round(dwt / 2.205,2)) %>% 
-    select(dwt)
+data %>%
+  mutate(dwt = round(dwt / 2.205, 2)) %>%
+  select(dwt)
 ```
 
 # Case_when
@@ -181,9 +180,9 @@ Using mutate and case_when, let's create a variable called `age_group`. In this 
 
 ```{r}
 
-range(data$age,na.rm = TRUE)
+range(data$age, na.rm = TRUE)
 
-data %>% 
+data %>%
   mutate(age_group = case_when(
     age %in% 10:19 ~ "10s",
     age %in% 20:29 ~ "20s",
@@ -191,7 +190,6 @@ data %>%
     age %in% 40:49 ~ "40s",
     age %in% 50:59 ~ "50s"
   ))
-
 ```
 
 
@@ -202,11 +200,13 @@ data %>%
 Get the mean, median, min, and max weight for the fathers `dwt`.
 
 ```{r}
-data %>% 
-    summarize(mean_dad_weight = mean(dwt,na.rm = TRUE),
-              median_dad_weight = median(dwt, na.rm = TRUE),
-              min_dad_weight = min(dwt, na.rm = TRUE),
-              max_dad_weight = max(dwt, na.rm = TRUE))
+data %>%
+  summarize(
+    mean_dad_weight = mean(dwt, na.rm = TRUE),
+    median_dad_weight = median(dwt, na.rm = TRUE),
+    min_dad_weight = min(dwt, na.rm = TRUE),
+    max_dad_weight = max(dwt, na.rm = TRUE)
+  )
 ```
 
 #?
@@ -221,11 +221,12 @@ Calculate the mean weight for fathers based on their education levels (`ded`vari
  with `na.rm=`)
  
 ```{r}
-data %>% 
-    group_by(ded) %>% 
-    drop_na(ded) %>%
-    summarize(dad_weight = mean(dwt,
-                                na.rm = TRUE))
+data %>%
+  group_by(ded) %>%
+  drop_na(ded) %>%
+  summarize(dad_weight = mean(dwt,
+    na.rm = TRUE
+  ))
 ```
 
 # Across
@@ -238,7 +239,7 @@ Use `across` to get them all!
 * Don't forget to remove NAs otherwise it will yell at you!
 
 ```{r}
-data %>% 
+data %>%
   drop_na(drace) %>%
   group_by(drace) %>%
   summarize(across(dage:dwt, mean, na.rm = TRUE))
@@ -256,26 +257,27 @@ A new data frame called `mothers_below30` that:
 4. Uses `summarise` to calculate a new variable called `mean_gestation_w`
 5. Make sure to export it as a csv!
 
-+ Once you have that data frame just move of the variables to a different position using "relocate"
 
 ```{r}
-mothers_below30 <- data %>% 
-    filter(age < 30) %>% 
-    mutate(gestation_w = gestation/7) %>%
-    group_by(ed) %>% 
-    summarize(mean_gestation_w = mean(gestation_w,na.rm = TRUE))
-write_csv(mothers_below30,"exports/moms_under30.csv")
+mothers_below30 <- data %>%
+  filter(age < 30) %>%
+  mutate(gestation_w = gestation / 7) %>%
+  group_by(ed) %>%
+  summarize(mean_gestation_w = mean(gestation_w, na.rm = TRUE))
+write_csv(mothers_below30, "exports/moms_under30.csv")
 ```
 
+
++ Before you export it as a CSV, move one of the variables to a different position using "relocate"
 
 With Bonus:
 
 ```{r}
-mothers_below30 <- data %>% 
-    filter(age < 30) %>% 
-    mutate(gestation_w = gestation/7) %>%
-    group_by(ed) %>% 
-    summarize(mean_gestation_w = mean(gestation_w,na.rm = TRUE)) %>%
-    relocate (mean_gestation_w, .after=ed)
-write_csv(mothers_below30,"exports/moms_under30.csv")
+mothers_below30 <- data %>%
+  filter(age < 30) %>%
+  mutate(gestation_w = gestation / 7) %>%
+  group_by(ed) %>%
+  summarize(mean_gestation_w = mean(gestation_w, na.rm = TRUE)) %>%
+  relocate(mean_gestation_w, .after = ed)
+write_csv(mothers_below30, "exports/moms_under30.csv")
 ```

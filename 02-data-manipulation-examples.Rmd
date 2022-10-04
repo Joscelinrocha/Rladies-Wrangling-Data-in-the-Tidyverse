@@ -1,7 +1,7 @@
 ---
 title: "Data Manipulation Examples"
 author: "Joscelin Rocha Hidalgo"
-date: "Dec 13, 2020"
+date: "Tuesday, Oct 4th, 2022"
 output: 
     html_document:
         css: slides/style.css
@@ -184,16 +184,16 @@ data %>%
 
 Create a **new variable based on other variables**
 
-Create a new variable called `wt_k`. This variable will give you information about mom's weight pre-pregnancy(`wt`) in kilos (1 pound = .454 kilos).
+Create a new variable called `wt_k`. This variable will give you information about mom's weight pre-pregnancy(`wt.1`) in kilos (1 pound = .454 kilos).
 
 ```{r}
 data %>% 
-  mutate(wt_k = wt*.454)
+  mutate(wt_k = wt.1*.454)
 
 # too many decimals? let's round things
 
 data %>% 
-  mutate(wt_k = round((wt*.454),2))
+  mutate(wt_k = round((wt.1*.454),2))
 
 ```
 

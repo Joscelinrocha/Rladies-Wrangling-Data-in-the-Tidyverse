@@ -1,7 +1,7 @@
 ---
 title: "Thank you!!! Now what?"
-author: "Joscelin Rocha-Hidalgo <br /> (she,her,hers) <br /> @JoscelinRocha"
-date: "Dec 13th, 2020 <br /> DC BrainHack 2020"
+author: "Joscelin Rocha-Hidalgo <br /> (she, her, hers) <br /> @JoscelinRocha"
+date: "Tuesday, October 4th, 2022"
 output:
   xaringan::moon_reader:
     css: ["style.css", "default"]
@@ -13,8 +13,7 @@ output:
       ratio: 16:9
 ---
 ```{r include = FALSE}
-#options(htmltools.dir.version = FALSE)
-#xaringan::inf_mr()
+#renderthis::to_pdf("03-end-of-workshop-slides.Rmd")
 ```
 
 class: inverse, center, middle, dk-section-title
@@ -67,8 +66,10 @@ You can visit the [Rstudio Education site](https://education.rstudio.com/learn/b
 ![](images/rstudio_edu.png)
 ]
 
+---
 
-
+Visit Crystal Lewis' wiki: https://github.com/Cghlewis/data-wrangling-functions
+![](images/Crystal-wiki.gif)
 
 ---
 
