@@ -28,7 +28,7 @@ library(tidyverse)
 ```{r warning=FALSE}
 data <- read_csv("data/chds6162_data.csv")
 
-head(data,15)
+tail(data,12)
 ```
 
 # rename
@@ -87,7 +87,7 @@ df %>%
 
 df %>% 
   separate(x, c("column with As", "column with Bs")) %>%
-  unite("new col",1:2)
+  unite("new col",1:2, sep = " ")
 
 ```
 
@@ -102,7 +102,7 @@ With the function `select` we can select variables (columns) from the larger dat
 Use `select` to show just the `gestation` variable.
 
 ```{r}
-data_ges <- data %>%
+data %>%
   select(gestation)
 ```
 
@@ -126,7 +126,7 @@ data %>%
 
 # Filter
 
-![](slides/images/filter.png) ![art by ](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/dplyr_filter.jpg) art by @allison_horst
+![]images/filter.png) ![art by ](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/dplyr_filter.jpg) art by @allison_horst
 
 We use `filter` to choose a subset of cases.
 
@@ -136,7 +136,6 @@ Use `filter` to keep only those whose parents have been never married (value `5`
 data %>%
   filter(marital == 5) %>%
   select(age)
-
 ```
 
 Use `filter` to keep only those who are **not** divorced (value `3`).
@@ -157,7 +156,7 @@ Create a chain that keeps only those whose moms were in their 20s when they deli
 
 ```{r}
 data %>%
-  filter(ed == 5, age %in% 20:30)
+  filter(ed == 5, age %in% 20:30,ht >65)
 
 ```
 
@@ -193,13 +192,13 @@ data %>%
 # too many decimals? let's round things
 
 data %>% 
-  mutate(wt_k = round((wt.1*.454),2))
+  mutate(wt_k = round((wt.1*.454),1))
 
 ```
 
 # case_when
 
-![art by @allison_horst](slides/images/dplyr_case_when.png)
+![art by @allison_horst](images/dplyr_case_when.png)
 
 Change an **existing variable**
 
@@ -287,7 +286,7 @@ We can use `group_by` with multiple groups.
 
 ```{r}
 data %>% 
-  group_by(smoke,ed) %>%
+  group_by(ed,smoke) %>%
   summarize(mean_gestation_length = mean(gestation,
                                     na.rm = TRUE))
 ```
@@ -304,7 +303,6 @@ In the example above, we calculated the mean for gestation but what about if I w
 
 #If we didn't know better, we would do this:
 data %>% 
-  drop_na(smoke) %>%
   group_by(smoke) %>%
   summarize(mean_gestation_length = mean(gestation,
                                     na.rm = TRUE),
