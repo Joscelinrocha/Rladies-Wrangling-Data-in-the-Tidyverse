@@ -136,6 +136,7 @@ Use `filter` to keep only those whose parents have been never married (value `5`
 data %>%
   filter(marital == 5) %>%
   select(age)
+
 ```
 
 Use `filter` to keep only those who are **not** divorced (value `3`).
@@ -156,7 +157,9 @@ Create a chain that keeps only those whose moms were in their 20s when they deli
 
 ```{r}
 data %>%
-  filter(ed == 5, age %in% 20:30,ht >65)
+  filter(ed == 5, 
+         age %in% 20:30,
+         ht >65)
 
 ```
 
@@ -192,7 +195,7 @@ data %>%
 # too many decimals? let's round things
 
 data %>% 
-  mutate(wt_k = round((wt.1*.454),1))
+  mutate(wt_k = round((wt.1*.454),0))
 
 ```
 
@@ -234,14 +237,14 @@ With `summarize`, as the name implies, you will get a summary of your dataset.
 Get the mean days of gestation for this sample.
 
 ```{r}
-data %>%
+mean<-data %>%
   summarize(gestation_length_mean = round(mean(gestation, na.rm = TRUE),2))
 ```
 
 **Extra
 
 ```{r}
-data %>%
+mean2<-data %>%
   summarize(gestation_length_mean = round(mean(gestation, na.rm = TRUE),2)) %>%
   pull()
 ```
@@ -318,7 +321,7 @@ data %>%
 data %>% 
   drop_na(smoke) %>%
   group_by(smoke) %>%
-  summarize(across(c(gestation,age,dage),mean,na.rm = TRUE))
+  summarize(across(c(gestation,age,dage),~ mean (., na.rm = TRUE)))
 
 ?across
 ```
@@ -332,7 +335,7 @@ Sometimes you want to save the results of your work to a new data frame or repla
 to_graph <- data %>% 
   drop_na(smoke) %>%
   group_by(smoke) %>%
-  summarize(across(c(gestation,age,dage),mean,na.rm = TRUE))
+  summarize(across(c(gestation,age,dage),~mean(.,na.rm = TRUE)))
 
 to_graph
 ```
@@ -366,11 +369,10 @@ write_csv(csv_to_export, "exports/example_to_export.csv")
 # pivot_longer/pivot_wider
 
 ```{r}
-
 oops <- csv_to_export %>%
-  pivot_longer(c(age,dage), names_to = "mom_dad", values_to = "age_mean")
+  pivot_longer(c(age,dage), names_to = "potato", values_to = "age_mean")
 
 
 oops %>%
-  pivot_wider(names_from = mom_dad, values_from = "age_mean")
+  pivot_wider(names_from = "potato", values_from = "age_mean")
 ```
